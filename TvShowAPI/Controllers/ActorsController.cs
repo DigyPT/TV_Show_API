@@ -42,46 +42,46 @@ namespace TvShowAPI.Controllers
 
         }
 
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> AddSerieActor(int actorid,int episodeid)
-        //{
-        //    var actor = _dbContext.Actors.Find(actorid);
-        //    var episode = _dbContext.Episodes.Find(episodeid);
-        //    if(episode == null || actor==null)
-        //    {
-        //        //Erro;
-        //    }
-        //    else
-        //    {
-        //        _dbContext.Actors
-        //    }
-
-        //    return Ok();
-        //}
-
         //Metodo Get para obter todos os actores
         [HttpGet]
-        public IActionResult GetActors(int? pageNumber, int? pageSize)
+        public IActionResult GetActors(int? pageNumber, int? pageSize, string token)
         {
-            int currentPageNumber = pageNumber ?? 1;
-            int currentPageSize = pageSize ?? 10;
+            var sessao = _dbContext.Sessoes.Where(a => a.Token == token);
+            if (sessao == null)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized);
+            }
+            else
+            {
+                int currentPageNumber = pageNumber ?? 1;
+                int currentPageSize = pageSize ?? 10;
 
-            var actors = _dbContext.Actors;
+                var actors = _dbContext.Actors;
 
-            return Ok(actors.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
+                return Ok(actors.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
+            }
         }
 
+        //Metodo Get para obter todas as séries que um ator participou
         [HttpGet("[action]")]
-        public IActionResult GetAllSeries(int? pageNumber, int? pageSize, string actorName)
+        public IActionResult GetAllSeries(int? pageNumber, int? pageSize, string actorName, string token)
         {
-            int currentPageNumber = pageNumber ?? 1;
-            int currentPageSize = pageSize ?? 10;
+            var sessao = _dbContext.Sessoes.Where(a => a.Token == token);
+            if (sessao == null)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized);
+            }
+            else
+            {
+                int currentPageNumber = pageNumber ?? 1;
+                int currentPageSize = pageSize ?? 10;
 
-            var actorid = _dbContext.Actors.Where(a => a.Name == actorName).ToList();
-            int id = Convert.ToInt32(actorid[0].ID.ToString());
+                var actorid = _dbContext.Actors.Where(a => a.Name == actorName).ToList();
+                int id = Convert.ToInt32(actorid[0].ID.ToString());
 
-            var actors = _dbContext.Actors.Where(a => a.ID == id).Include(a => a.ActorSeries).ThenInclude(a => a.Serie);
-            return Ok(actors.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
+                var actors = _dbContext.Actors.Where(a => a.ID == id).Include(a => a.ActorSeries).ThenInclude(a => a.Serie);
+                return Ok(actors.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
+            }
         }
 
     }

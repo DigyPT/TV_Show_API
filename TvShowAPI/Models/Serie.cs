@@ -8,9 +8,9 @@ namespace TvShowAPI.Models
     {
         
         public int ID { get; set; }
-        
-        public string Name { get; set; }
 
+        [Required]
+        public string Name { get; set; }
         public string Country { get; set; }
         public string Start_Date { get; set; }
         public string End_Date { get; set; }

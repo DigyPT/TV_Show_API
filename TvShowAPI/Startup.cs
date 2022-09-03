@@ -32,7 +32,7 @@ namespace TvShowAPI
 
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddMvc().AddXmlSerializerFormatters();
-
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TvShowAPI", Version = "v1" });

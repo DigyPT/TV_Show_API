@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TvShowAPI.Models
 {
     public class Actor
     {
         public int ID { get; set; }
+
+        [Required]
         public string Name { get; set; }
         public string Date_Birthday { get; set; }
 

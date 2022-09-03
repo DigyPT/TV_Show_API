@@ -19,6 +19,7 @@ namespace TvShowAPI.Controllers
             _dbContext = dbContext;
         }
 
+        //Metodo Post default para adicionar episódios
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] Episode episode)
         {
@@ -35,14 +36,23 @@ namespace TvShowAPI.Controllers
 
         }
 
+        //Metodo Get default para receber todos os episódios
         [HttpGet]
-        public IActionResult GetEpisodes(int? pageNumber, int? pageSize)
+        public IActionResult GetEpisodes(int? pageNumber, int? pageSize, string token)
         {
-            int currentPageNumber = pageNumber ?? 1;
-            int currentPageSize = pageSize ?? 10;
+            var sessao = _dbContext.Sessoes.Where(a => a.Token == token);
+            if (sessao == null)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized);
+            }
+            else
+            {
+                int currentPageNumber = pageNumber ?? 1;
+                int currentPageSize = pageSize ?? 10;
 
-            var episodes = _dbContext.Episodes;
-            return Ok(episodes.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
+                var episodes = _dbContext.Episodes;
+                return Ok(episodes.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
+            }
         }
     }
 }
