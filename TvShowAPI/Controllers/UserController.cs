@@ -21,8 +21,8 @@ namespace TvShowAPI.Controllers
         }
 
         //Metodo Post default para adicionar utilizadores
-        [HttpPost]
-        public async Task<IActionResult> Post(User user)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Register(User user)
         {
             try
             {
